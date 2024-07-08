@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Property Investing Game</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h2>Player Stats</h2>
+    <div id="playerStats">
+      <h3>Player Stats</h3>
+      <p>Age: <span id="age">23</span></p>
+      <p>Date: <span id="date">July 2024</span></p>
+      <p>Monthly Income: $<span id="monthlyIncome">0</span></p>
+      <p>
+        Monthly Cashflow: $<span id="monthlyCashflow">0.00</span> (<span
+          id="monthlyCashflowPercentage"
+          >0.00%</span
+        >)
+      </p>
+      <p>
+        Bank Account: $<span id="bankAccount">1,000,000.00</span> (<span
+          id="bankAccountPercentage"
+          >0%</span
+        >)
+      </p>
+      <p>
+        Goal: $<span id="goalBankAccount">1,100,000</span> in bank by age
+        <span id="goalAge">24</span>, $<span id="goalMonthlyCashflow"
+          >20,000</span
+        >
+        monthly cashflow by age <span id="goalAge">24</span>
+      </p>
+      <p>Game Completion: <span id="gameCompletion">0%</span></p>
+      <button id="pauseTime">Pause Time</button>
+      <button id="fastForward6Months">Fast Forward 6 Months</button>
+    </div>
+
+    <h2>Buy a Property</h2>
+    <div id="filterButtons">
+      <button class="filterButton" data-filter="low">Low Price</button>
+      <button class="filterButton" data-filter="medium">Medium Price</button>
+      <button class="filterButton" data-filter="high">High Price</button>
+    </div>
+    <div id="propertiesForSale"></div>
+    <h2>My Properties</h2>
+    <table id="ownedProperties">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Type</th>
+          <th>Purchase Price</th>
+          <th>Down Payment</th>
+          <th>Monthly Payment</th>
+          <th>Interest Only Payment</th>
+          <th>Loan Amount</th>
+          <th>Estimated Rent</th>
+          <th>ARV</th>
+          <th>Rehab Cost</th>
+          <th>Construction Duration</th>
+          <th>Address</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script type="module">
+      const propertyPics = [
+        "https://flipsystem-static-assets.s3.amazonaws.com/undefined/a36684f5-7a66-4c2f-b6f3-2427447990d3_TestHouseImage.jpg",
+        "https://listing-images.homejunction.com/maris/MAR92276352/photo_1.jpg",
+        "https://listing-images.homejunction.com/maris/MAR92701299/photo_1.jpg",
+        "https://flipsystem-static-assets.s3.amazonaws.com/Prod/marketplace/properties-images/de90f30c-d83a-478f-b670-763a3269c4ca_1.jpeg",
+      ];
+
+      $(document).ready(function () {
+        var player = {
+          age: 23,
+          bankAccount: 1_000_000,
+          monthlyCashflow: 0,
+          properties: [],
+          currentDate: new Date(2024, 6),
+          monthlyIncome: 0,
+          goal: {
+            bankAccount: 1_100_000,
+            monthlyCashflow: 20_000,
+            age: 24,
+          },
+          gameStartDate: new Date(),
+          gameEndDate: new Date(2025, 5), // Assuming game ends when player turns 24
+          isTimePaused: false,
+        };
+
+        var streetNames = [
+          "Maple Street",
+          "Oak Street",
+          "Elm Street",
+          "Pine Street",
+          "Cedar Street",
+          "Willow Street",
+          "Main Street",
+          "Broadway",
+          "High Street",
+          "Park Avenue",
+        ];
+
+        function generateProperty(filter) {
+          var basePrice;
+          if (filter === "low") {
+            basePrice =
+              Math.round((Math.floor(Math.random() * 100_000) + 50_000) / 500) *
+              500;
+          } else if (filter === "medium") {
+            basePrice =
+              Math.round(
+                (Math.floor(Math.random() * 300_000) + 100_000) / 500
+              ) * 500;
+          } else if (filter === "high") {
+            basePrice =
+              Math.round(
+                (Math.floor(Math.random() * 600_000) + 300_000) / 500
+              ) * 500;
+          }
+
+          var rehab =
+            Math.round((Math.floor(Math.random() * 30_000) + 10_000) / 500) *
+            500;
+          var price = Math.round(basePrice + rehab);
+
+          var rentMultiplier =
+            filter === "low" ? 0.009 : filter === "medium" ? 0.007 : 0.005;
+          var postRehabRentMultiplier = rentMultiplier * 1.2;
+          rentMultiplier += Math.random() * 0.008 - 0.004;
+          postRehabRentMultiplier += Math.random() * 0.008 - 0.004;
+          var rent = Math.round((price * rentMultiplier) / 50) * 50;
+          var postRehabRent =
+            Math.round(((price + rehab) * postRehabRentMultiplier) / 50) * 50;
+
+          var postRehabRent = Math.round(((price + rehab) * 0.01) / 50) * 50;
+          var arv = Math.round((price + rehab * 1.5) / 500) * 500;
+          var isTenanted = Math.random() > 0.5; // 50% chance of being initially tenanted
+          var constructionDuration = Math.floor(Math.random() * 3) + 1; // Random construction time between 1 and 3 months
+          var streetNumber = Math.floor(Math.random() * 100) + 1;
+          var streetName =
+            streetNames[Math.floor(Math.random() * streetNames.length)];
+
+          var randomImageIndex = Math.floor(
+            Math.random() * propertyPics.length
+          );
+          var propertyImage = propertyPics[randomImageIndex];
+
+          $("#propertiesForSale").html(`
+            <div>
+                <img src="${propertyImage}" alt="Property Image" style="width:100%;max-width:300px;"> <!-- Display the property image -->
+                <p>Cash Purchase Price: $${numberWithCommas(price)}</p>
+                <p>Financing Down Payment: $${numberWithCommas(
+                  (price * 0.2).toFixed(2)
+                )}</p>
+                <p>Financing Monthly Payment: $${numberWithCommas(
+                  (price / 30).toFixed(2)
+                )}</p>
+                <p>Estimated Rent: $${numberWithCommas(
+                  rent
+                )}/month (Current), $${numberWithCommas(postRehabRent)}/month (Post Rehab)</p>
+                <p>Estimated ARV: $${numberWithCommas(arv)}</p>
+                <p>Estimated Rehab: $${numberWithCommas(rehab)}</p>
+                <p>Construction Duration: ${constructionDuration} months</p>
+                <p>Address: ${streetNumber} ${streetName}</p>
+                <p>Status: ${isTenanted ? "Tenanted" : "Vacant"}</p>
+                <button class="buyCash" ${
+                  player.isTimePaused ? "disabled" : ""
+                } data-image="${propertyImage}" >Buy with Cash</button>
+                
+                <button class="buyHardMoney" ${
+                  player.isTimePaused ? "disabled" : ""
+                } data-image="${propertyImage}" >Buy with Hard Money</button>
+
+                <button class="buyFinancing" ${
+                  player.isTimePaused ? "disabled" : ""
+                } data-image="${propertyImage}">Buy with Conventional Financing</button>
+                <button class="passProperty" ${
+                  player.isTimePaused ? "disabled" : ""
+                }>Pass</button>
+            </div>
+          `);
+
+          $(".buyCash").click(function () {
+            console.log("HERE2");
+            var image = $(this).attr("data-image");
+            console.log("HERE ", image);
+            player.bankAccount -= price;
+            player.properties.push({
+              type: "Cash",
+              price: price,
+              downPayment: null,
+              monthlyMortgagePayment: null,
+              monthlyInterestOnlyPayment: null,
+              loanAmount: null,
+              rent,
+              postRehabRent,
+              arv,
+              rehab,
+              rehabbed: false,
+              rented: isTenanted,
+              underRenovation: false,
+              isTenanted: isTenanted,
+              constructionDuration: constructionDuration,
+              address: `${streetNumber} ${streetName}`,
+              loanTermMonths: null,
+              monthsRemaining: null,
+              image: image,
+            });
+            console.log(player.properties);
+            updateBankAccount();
+            generateProperty(filter);
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          });
+
+          $(".buyHardMoney").click(function () {
+            var interestRate = 0.12; // Annual interest rate for hard money loans
+            var loanTermMonths = 12; // Term of the loan in months
+            var loanToValueRatio = 0.75; // Lending up to 75% of the ARV
+            var financedPrice = price; // 100% of purchase price financed
+            var rehabFinancing = rehab * 0.9; // 90% of rehab costs financed
+            var totalLoanAmount = financedPrice + rehabFinancing; // Total amount financed
+            var monthlyInterestOnlyPayment =
+              (totalLoanAmount * interestRate) / 12; // Interest-only payments monthly
+
+            // Hard money loans typically don't require a down payment for the calculation,
+            // but let's assume some upfront costs covered by the player, which could include points or fees.
+            // For simplicity, we're not deducting this from the player's bank account here.
+            var upfrontCosts = totalLoanAmount * 0.02; // Example: 2% of total loan amount for points/fees
+            player.bankAccount -= upfrontCosts; // Deducting upfront costs from player's bank account
+
+            player.properties.push({
+              type: "Hard Money Financing",
+              price: financedPrice,
+              downPayment: null, // Typically not applicable for hard money, but included for consistency
+              monthlyMortgagePayment: null, // Not applicable, as hard money payments are interest-only
+              monthlyInterestOnlyPayment: monthlyInterestOnlyPayment,
+              loanAmount: totalLoanAmount,
+              rent,
+              postRehabRent,
+              arv,
+              rehab,
+              rehabbed: false,
+              rented: isTenanted,
+              underRenovation: false,
+              isTenanted: isTenanted,
+              constructionDuration: constructionDuration,
+              address: `${streetNumber} ${streetName}`,
+              loanTermMonths: loanTermMonths,
+              monthsRemaining: loanTermMonths,
+            });
+
+            updateBankAccount();
+            generateProperty(filter);
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          });
+
+          $(".buyFinancing").click(function () {
+            var financedPrice = price;
+            var downPayment = financedPrice * 0.2;
+            var loanAmount = financedPrice - downPayment;
+            var interestRate = 0.04;
+            var loanTermYears = 30;
+            var loanTermMonths = loanTermYears * 12;
+            var monthlyInterestRate = interestRate / 12;
+            var monthlyMortgagePayment =
+              (loanAmount *
+                (monthlyInterestRate *
+                  Math.pow(1 + monthlyInterestRate, loanTermMonths))) /
+              (Math.pow(1 + monthlyInterestRate, loanTermMonths) - 1);
+
+            player.bankAccount -= downPayment;
+            player.properties.push({
+              type: "Conventional Financing",
+              price: financedPrice,
+              downPayment: downPayment,
+              monthlyMortgagePayment: monthlyMortgagePayment,
+              monthlyInterestOnlyPayment: null, // Not applicable for conventional loans
+              loanAmount: loanAmount,
+              rent,
+              postRehabRent,
+              arv,
+              rehab,
+              rehabbed: false,
+              rented: isTenanted,
+              underRenovation: false,
+              isTenanted: isTenanted,
+              constructionDuration: constructionDuration,
+              address: `${streetNumber} ${streetName}`,
+              loanTermMonths: loanTermMonths,
+              monthsRemaining: loanTermMonths,
+            });
+            updateBankAccount();
+            generateProperty(filter);
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          });
+
+          $(".passProperty").click(function () {
+            generateProperty(filter);
+          });
+        }
+
+        $("#filterButtons .filterButton").click(function () {
+          var filter = $(this).data("filter");
+          generateProperty(filter);
+        });
+
+        function updateRefinanceEligibility() {
+          player.properties.forEach((property) => {
+            const monthsSinceLastFinance = getMonthsSinceLastFinance(
+              property.lastFinanceDate
+            );
+            const hasSufficientEquity =
+              property.arv > property.loanAmount * 1.33; // Example: 33% more than loan
+            const isNotUnderRenovation = !property.underRenovation;
+            const isRehabbed = property.rehabbed; // Assuming a property must be rehabbed to qualify
+
+            property.refinanceAvailable =
+              monthsSinceLastFinance >= 6 &&
+              hasSufficientEquity &&
+              isNotUnderRenovation &&
+              isRehabbed;
+          });
+
+          // Make sure to refresh the UI to reflect changes
+          updateOwnedProperties();
+        }
+
+        function getMonthsSinceLastFinance(lastFinanceDate) {
+          if (!lastFinanceDate) return Infinity; // If never financed, make it always eligible
+          const currentDate = new Date();
+          const financeDate = new Date(lastFinanceDate);
+          return (
+            (currentDate.getFullYear() - financeDate.getFullYear()) * 12 +
+            currentDate.getMonth() -
+            financeDate.getMonth()
+          );
+        }
+
+        function updateBankAccount() {
+          var percentage = (player.bankAccount / player.goal.bankAccount) * 100;
+          $("#bankAccount").text(
+            numberWithCommas(player.bankAccount.toFixed(2))
+          );
+          $("#bankAccountPercentage").text(percentage.toFixed(2) + "%");
+        }
+
+        function updateOwnedProperties() {
+          var html = "";
+          player.properties.forEach(function (property, index) {
+            var status = property.rented ? "Rented" : "Vacant";
+            status = property.underRenovation ? "Under Renovation" : status;
+
+            html += `<tr>
+            <td><img src="${
+              property.image
+            }" alt="Property" style="width:100px;height:auto;"></td>
+
+            <td>${property.type}</td>
+            <td>$${numberWithCommas(property.price)}</td>
+            <td>${
+              property.downPayment
+                ? `$${numberWithCommas(property.downPayment)}`
+                : "N/A"
+            }</td>
+            <td>${
+              property.monthlyMortgagePayment
+                ? `$${numberWithCommas(property.monthlyMortgagePayment)}`
+                : "N/A"
+            }</td>
+            <td>${
+              property.monthlyInterestOnlyPayment
+                ? `$${numberWithCommas(property.monthlyInterestOnlyPayment)}`
+                : "N/A"
+            }</td>
+            <td>${
+              property.loanAmount
+                ? `$${numberWithCommas(property.loanAmount)}`
+                : "N/A"
+            }</td>
+            <td>$${numberWithCommas(property.rent)}/month</td>
+            <td>$${numberWithCommas(property.arv)}</td>
+            <td>$${numberWithCommas(property.rehab)}</td>
+            <td>${property.constructionDuration} months</td>
+            <td>${property.address}</td>
+            <td>${status}</td>
+            <td>
+                ${
+                  !property.isTenanted &&
+                  !property.rehabbed &&
+                  !property.underRenovation
+                    ? `<button class="myPropertiesButton" onclick="startRehab(${index})">Start Rehab</button>`
+                    : ""
+                }
+                ${
+                  property.isTenanted
+                    ? `<button class="myPropertiesButton" onclick="removeTenant(${index})">Remove Tenant</button>`
+                    : ""
+                }
+                ${
+                  !property.rented && !property.underRenovation
+                    ? `<button class="myPropertiesButton" onclick="rentProperty(${index})">Rent Out</button>`
+                    : ""
+                }
+                ${
+                  property.refinanceAvailable
+                    ? `<button class="myPropertiesButton" onclick="refinanceProperty(${index})">Refinance</button>`
+                    : ""
+                }
+                <button class="myPropertiesButton" onclick="sellProperty(${index})">Sell</button>
+            </td>
+        </tr>`;
+          });
+          $("#ownedProperties tbody").html(html);
+        }
+
+        window.removeTenant = function (index) {
+          var property = player.properties[index];
+          if (property.isTenanted) {
+            property.isTenanted = false;
+            property.rented = false;
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          }
+        };
+
+        window.refinanceProperty = function (index) {
+          var property = player.properties[index];
+          if (!property.rehabbed || !property.refinanceAvailable) {
+            alert("This property is not eligible for refinancing.");
+            return;
+          }
+
+          var currentLoanAmount = property.loanAmount || property.price; // Use original loan amount or price if no loan
+          var newLoanAmount = property.arv * 0.75; // Example: Up to 75% of ARV
+          var cashOut =
+            newLoanAmount - currentLoanAmount - newLoanAmount * 0.02; // Subtract closing costs (e.g., 2% of the new loan)
+
+          if (cashOut <= 0) {
+            alert("Refinancing does not provide additional cash.");
+            return;
+          }
+
+          // Adjust player's bank account and property details
+          player.bankAccount += cashOut;
+          property.loanAmount = newLoanAmount;
+          property.refinanceAvailable = false; // Refinancing done, not available anymore until conditions are met again
+
+          updateBankAccount(); // A function to refresh the displayed bank account balance
+          updateOwnedProperties(); // Refresh the property list to reflect changes
+          alert(
+            "Property refinanced. Cash-out amount added to bank account: $" +
+              numberWithCommas(cashOut.toFixed(2))
+          );
+        };
+
+        window.startRehab = function (index) {
+          var property = player.properties[index];
+          if (
+            player.bankAccount >= property.rehab &&
+            !property.underRenovation &&
+            !property.rented
+          ) {
+            player.bankAccount -= property.rehab;
+            property.underRenovation = true;
+            setTimeout(function () {
+              property.rehabbed = true;
+              property.underRenovation = false;
+              property.rented = false;
+              updateOwnedProperties();
+              updateMonthlyCashflow();
+              updateGameCompletion();
+            }, property.constructionDuration * 5000); // Simulates rehab time based on the property's construction duration
+            updateBankAccount();
+            updateOwnedProperties();
+          } else {
+            alert(
+              "Not enough money to start rehab, the property is already under renovation, or it is currently rented."
+            );
+          }
+        };
+
+        window.rentProperty = function (index) {
+          var property = player.properties[index];
+          if (
+            !property.rehabbed &&
+            !property.underRenovation &&
+            !property.isTenanted
+          ) {
+            property.rented = true;
+            property.isTenanted = true;
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          } else {
+            alert(
+              "Property cannot be rented out. It might be under renovation or already rented."
+            );
+          }
+        };
+
+        window.sellProperty = function (index) {
+          var property = player.properties[index];
+          if (!property.underRenovation) {
+            player.bankAccount += property.arv;
+            player.properties.splice(index, 1);
+            updateBankAccount();
+            updateOwnedProperties();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+          } else {
+            alert("Property is currently under renovation and cannot be sold.");
+          }
+        };
+
+        $("#pauseTime").click(function () {
+          player.isTimePaused = !player.isTimePaused;
+          $("#fastForward6Months").prop("disabled", player.isTimePaused);
+          $(".myPropertiesButton").prop("disabled", player.isTimePaused);
+          $(".filterButton").prop("disabled", player.isTimePaused);
+          if (player.isTimePaused) {
+            $(".buyCash").prop("disabled", true);
+            $(".buyHardMoney").prop("disabled", true);
+            $(".buyFinancing").prop("disabled", true);
+            $(".passProperty").prop("disabled", true);
+            $("#pauseTime").text("Unpause Time");
+          } else {
+            $(".buyCash").prop("disabled", false);
+            $(".buyHardMoney").prop("disabled", false);
+            $(".buyFinancing").prop("disabled", false);
+            $(".passProperty").prop("disabled", false);
+            $("#pauseTime").text("Pause Time");
+          }
+        });
+
+        $("#fastForward6Months").click(function () {
+          for (var i = 0; i < 6; i++) {
+            updateTimeAndAge();
+          }
+        });
+
+        function updateMonthlyCashflow() {
+          var totalRentalIncome = player.properties.reduce(function (
+            acc,
+            property
+          ) {
+            if (property.rented && !property.underRenovation) {
+              // Use pre-rehab rent if the property has not been rehabbed, else use post-rehab rent
+              return (
+                acc +
+                (property.rehabbed ? property.postRehabRent : property.rent)
+              );
+            }
+            return acc;
+          },
+          0);
+          player.monthlyCashflow = totalRentalIncome + player.monthlyIncome;
+          var percentage =
+            (player.monthlyCashflow / player.goal.monthlyCashflow) * 100;
+          $("#monthlyCashflow").text(
+            numberWithCommas(player.monthlyCashflow.toFixed(2))
+          );
+          $("#monthlyCashflowPercentage").text(percentage.toFixed(2) + "%");
+        }
+
+        function collectRent() {
+          player.properties.forEach(function (property) {
+            if (property.rented && !property.underRenovation) {
+              // Determine the correct rent amount based on whether the property has been rehabbed
+              const rentAmount = property.rehabbed
+                ? property.postRehabRent
+                : property.rent;
+              player.bankAccount += rentAmount;
+            }
+          });
+          updateBankAccount();
+        }
+
+        function updateTimeAndAge() {
+          if (!player.isTimePaused) {
+            player.currentDate.setMonth(player.currentDate.getMonth() + 1);
+            var monthNames = [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ];
+            var dateStr =
+              monthNames[player.currentDate.getMonth()] +
+              " " +
+              player.currentDate.getFullYear();
+            $("#date").text(dateStr);
+
+            if (player.currentDate >= player.gameEndDate) {
+              console.log("Game Over! You have reached the end of the game.");
+            } else {
+              if (
+                player.currentDate.getMonth() === 6 &&
+                player.currentDate.getDate() === 1
+              ) {
+                player.age += 1;
+                $("#age").text(player.age);
+                if (player.age === player.goal.age) {
+                  checkGoalReached();
+                }
+              }
+            }
+
+            player.bankAccount += player.monthlyIncome; // Add monthly income
+            collectRent();
+            updateMonthlyCashflow();
+            updateGameCompletion();
+            updateRefinanceEligibility();
+          }
+        }
+
+        function checkGoalReached() {
+          var gameCompletionPercentage =
+            ((player.currentDate - player.gameStartDate) /
+              (player.gameEndDate - player.gameStartDate)) *
+            100;
+          $("#gameCompletion").text(gameCompletionPercentage.toFixed(2) + "%");
+          if (gameCompletionPercentage >= 100) {
+            alert("Congratulations! You have completed the game.");
+          } else {
+            alert("Sorry, you have not completed the game yet.");
+          }
+        }
+
+        function updateGameCompletion() {
+          var gameCompletionPercentage =
+            ((player.currentDate - player.gameStartDate) /
+              (player.gameEndDate - player.gameStartDate)) *
+            100;
+          $("#gameCompletion").text(gameCompletionPercentage.toFixed(2) + "%");
+        }
+
+        function numberWithCommas(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        generateProperty("low");
+        updateBankAccount();
+        updateMonthlyCashflow();
+
+        setInterval(updateTimeAndAge, 5000); // Simulate one month every 5 seconds
+      });
+    </script>
+  </body>
+</html>
