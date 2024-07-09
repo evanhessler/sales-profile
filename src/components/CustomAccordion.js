@@ -1,79 +1,98 @@
-import * as React from "react";
+// CustomAccordion.js
+import React from "react";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { IconButton, Box } from "@mui/material";
+import AnimatedCheckmark from "./AnimatedCheckmark"; // Import the animated checkmark
 
-export default function CustomAccordion() {
+export default function CustomAccordion({
+  title,
+  children,
+  expanded,
+  onChange,
+}) {
   const [checked, setChecked] = React.useState(false);
-  const [expanded, setExpanded] = React.useState(false);
 
   const handleCheck = (event) => {
     event.stopPropagation(); // Prevents the accordion from toggling
     setChecked(!checked);
   };
 
-  const handleToggleExpand = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <div>
-      <Accordion expanded={expanded} onChange={handleToggleExpand}>
+      <Accordion expanded={expanded} onChange={onChange}>
         <AccordionSummary
-          aria-controls="panel1-content"
-          id="panel1-header"
+          aria-controls="panel-content"
+          id="panel-header"
           style={{
             backgroundColor: checked ? "green" : "transparent",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            width: "100%", // Ensure the summary takes full width
+            width: "100%",
+            marginTop: 5,
+            borderRight: checked
+              ? "2px solid green"
+              : expanded
+              ? "2px solid #cfcfcf"
+              : "2px solid transparent",
+            borderLeft: checked
+              ? "2px solid green"
+              : expanded
+              ? "2px solid #cfcfcf"
+              : "2px solid transparent",
+            borderTop: checked
+              ? "2px solid green"
+              : expanded
+              ? "2px solid #cfcfcf"
+              : "2px solid transparent",
+            borderTopRightRadius: "4px",
+            borderTopLeftRadius: "4px",
+            borderBottomRightRadius: checked ? "4px" : 0,
+            borderBottomLeftRadius: checked ? "4px" : 0,
           }}
         >
-          <Box sx={{ marginTop: 0.5 }}>Accordion 1</Box>
-          <Box flex="1" /> {/* This box acts as a spacer */}
+          <Typography sx={{ marginTop: 0.8 }}>{title}</Typography>
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              onChange();
+            }}
+            size="small"
+            style={{
+              color: "#cfcfcf",
+              transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.3s ease-in-out",
+            }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+          <Box flex="1" />
           <Box>
             <IconButton
               onClick={handleCheck}
               size="small"
-              style={{ color: "#cfcfcf", marginRight: "8px" }}
+              style={{ marginRight: "8px" }}
             >
-              <CheckCircleOutlineIcon />
-            </IconButton>
-            <IconButton
-              onClick={(event) => {
-                event.stopPropagation();
-                handleToggleExpand();
-              }}
-              size="small"
-              style={{
-                color: "#cfcfcf",
-                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "transform 0.3s ease-in-out",
-              }}
-            >
-              <ExpandMoreIcon />
+              <AnimatedCheckmark checked={checked} onClick={handleCheck} />
             </IconButton>
           </Box>
         </AccordionSummary>
         <AccordionDetails
           style={{
-            borderLeft: checked ? "2px solid green" : "2px solid transparent",
-            borderRight: checked ? "2px solid green" : "2px solid transparent",
-            borderBottom: checked ? "2px solid green" : "2px solid transparent",
-            padding: "16px",
-            borderRadius: "4px",
+            borderLeft: checked ? "2px solid green" : "2px solid #cfcfcf",
+            borderRight: checked ? "2px solid green" : "2px solid #cfcfcf",
+            borderBottom: checked ? "2px solid green" : "2px solid #cfcfcf",
+            borderBottomRightRadius: "4px",
+            borderBottomLeftRadius: "4px",
             transition: "all 0.3s ease-in-out",
-            marginTop: -12,
-            paddingTop: 25,
+            paddingTop: 20,
           }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
+          {children}
         </AccordionDetails>
       </Accordion>
     </div>

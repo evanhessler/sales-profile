@@ -1,6 +1,7 @@
 import React from "react";
 import Meta from "./../components/Meta";
 import CustomAccordion from "./../components/CustomAccordion";
+import AccordionGroup from "./../components/AccordionGroup";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -42,7 +43,17 @@ function IndexPage(props) {
             <Typography variant="h6">What are my next steps?</Typography>
           </Box>
           <Box sx={{ margin: 1 }}>
-            <CustomAccordion />
+            <AccordionGroup>
+              <CustomAccordion title="Accordion 1">
+                Content of Accordion 1
+              </CustomAccordion>
+              <CustomAccordion title="Accordion 2">
+                Content of Accordion 2
+              </CustomAccordion>
+              <CustomAccordion title="Accordion 3">
+                Content of Accordion 3
+              </CustomAccordion>
+            </AccordionGroup>
           </Box>
         </Box>
       </Container>
