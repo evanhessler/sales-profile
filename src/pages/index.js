@@ -68,10 +68,12 @@ function IndexPage(props) {
                 defaultChecked={true}
               >
                 <Typography sx={{ fontSize: 16 }}>
-                  Complete your Initial Phone Consultation
+                  "Hey Evan, it was great meeting with you! Excited to have you
+                  go through this page and show your wife. Let me know if I can
+                  answer any questions for you." - Zach
                 </Typography>
               </CustomAccordion>
-              <CustomAccordion title="Watch the Following Video">
+              <CustomAccordion title="Learn About What We Do">
                 <Box>
                   <div
                     className="wistia_responsive_padding"
@@ -128,7 +130,12 @@ function IndexPage(props) {
                   </div>
                 </Box>
               </CustomAccordion>
-              <CustomAccordion title="Accordion 3">
+              <CustomAccordion title="Tell us About your Goals">
+                <Typography sx={{ fontSize: 16 }}>
+                  Tell us About your Goals
+                </Typography>
+              </CustomAccordion>
+              <CustomAccordion title="Do your Due Dilligence">
                 <Typography sx={{ fontSize: 16 }}>
                   Content of Accordion 1
                 </Typography>

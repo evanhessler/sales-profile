@@ -1,4 +1,3 @@
-// AccordionGroup.js
 import React from "react";
 import CustomAccordion from "./CustomAccordion"; // Importing CustomAccordion
 
