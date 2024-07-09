@@ -21,6 +21,8 @@ export default function CustomAccordion({
     setChecked(!checked);
   };
 
+  const gradient = "linear-gradient(180deg, #A582EF 0%, #532a9a 100%)";
+
   return (
     <div>
       <Accordion expanded={expanded} onChange={onChange}>
@@ -28,31 +30,31 @@ export default function CustomAccordion({
           aria-controls="panel-content"
           id="panel-header"
           style={{
-            backgroundColor: checked ? "green" : "transparent",
+            background: checked ? gradient : "transparent",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
             marginTop: 5,
             borderRight: checked
-              ? "2px solid green"
+              ? `2px solid #A582EF`
               : expanded
-              ? "2px solid #cfcfcf"
+              ? "2px solid #6b6b6b"
               : "2px solid transparent",
             borderLeft: checked
-              ? "2px solid green"
+              ? `2px solid #A582EF`
               : expanded
-              ? "2px solid #cfcfcf"
+              ? "2px solid #6b6b6b"
               : "2px solid transparent",
             borderTop: checked
-              ? "2px solid green"
+              ? `2px solid #A582EF`
               : expanded
-              ? "2px solid #cfcfcf"
+              ? "2px solid #6b6b6b"
               : "2px solid transparent",
             borderTopRightRadius: "4px",
             borderTopLeftRadius: "4px",
-            borderBottomRightRadius: checked ? "4px" : 0,
-            borderBottomLeftRadius: checked ? "4px" : 0,
+            borderBottomRightRadius: expanded ? 0 : "4px",
+            borderBottomLeftRadius: expanded ? 0 : "4px",
           }}
         >
           <Typography sx={{ marginTop: 0.8 }}>{title}</Typography>
@@ -83,9 +85,9 @@ export default function CustomAccordion({
         </AccordionSummary>
         <AccordionDetails
           style={{
-            borderLeft: checked ? "2px solid green" : "2px solid #cfcfcf",
-            borderRight: checked ? "2px solid green" : "2px solid #cfcfcf",
-            borderBottom: checked ? "2px solid green" : "2px solid #cfcfcf",
+            borderLeft: checked ? `2px solid #A582EF` : "2px solid #6b6b6b",
+            borderRight: checked ? `2px solid #A582EF` : "2px solid #6b6b6b",
+            borderBottom: checked ? `2px solid #A582EF` : "2px solid #6b6b6b",
             borderBottomRightRadius: "4px",
             borderBottomLeftRadius: "4px",
             transition: "all 0.3s ease-in-out",
