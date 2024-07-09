@@ -10,13 +10,11 @@ export default function AccordionGroup({ children }) {
   };
 
   React.useEffect(() => {
-    // Automatically set the first uncompleted item as expanded
-    const firstUncompletedIndex = React.Children.toArray(children).findIndex(
-      (child) => !child.props.checked
+    // Automatically set the first unchecked item as expanded
+    const firstUncheckedIndex = React.Children.toArray(children).findIndex(
+      (child) => !child.props.defaultChecked
     );
-    setExpandedIndex(
-      firstUncompletedIndex === -1 ? null : firstUncompletedIndex
-    );
+    setExpandedIndex(firstUncheckedIndex === -1 ? null : firstUncheckedIndex);
   }, [children]);
 
   return (

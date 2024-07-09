@@ -13,8 +13,9 @@ export default function CustomAccordion({
   children,
   expanded,
   onChange,
+  defaultChecked,
 }) {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState(defaultChecked || false);
 
   const handleCheck = (event) => {
     event.stopPropagation(); // Prevents the accordion from toggling
