@@ -27,13 +27,14 @@ export default function CustomAccordion() {
           aria-controls="panel1-content"
           id="panel1-header"
           style={{
+            backgroundColor: checked ? "green" : "transparent",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%", // Ensure the summary takes full width
           }}
         >
-          <Box component="span">Accordion 1</Box>
+          <Box sx={{ marginTop: 0.5 }}>Accordion 1</Box>
           <Box flex="1" /> {/* This box acts as a spacer */}
           <Box>
             <IconButton
@@ -61,10 +62,14 @@ export default function CustomAccordion() {
         </AccordionSummary>
         <AccordionDetails
           style={{
-            backgroundColor: checked ? "green" : "transparent",
-            border: checked ? "2px solid green" : "2px solid transparent",
+            borderLeft: checked ? "2px solid green" : "2px solid transparent",
+            borderRight: checked ? "2px solid green" : "2px solid transparent",
+            borderBottom: checked ? "2px solid green" : "2px solid transparent",
             padding: "16px",
-            borderRadius: "4px", // Optional for rounded corners
+            borderRadius: "4px",
+            transition: "all 0.3s ease-in-out",
+            marginTop: -12,
+            paddingTop: 25,
           }}
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
