@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "PuviBold";
+  src: url("./fonts/Zoho Puvi Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "PuviThin";
+  src: url("./fonts/Zoho Puvi Thin.ttf") format("truetype");
+}
