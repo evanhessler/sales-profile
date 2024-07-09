@@ -20,7 +20,7 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
         {/* Animated path that appears to draw the checkmark */}
         <path
           d="M5 13l4 4L19 7"
-          stroke={checked ? "#deb9ed" : "#cfcfcf"} // Bright green when checked, grey when not
+          stroke={checked ? "#93f760" : "#cfcfcf"} // Bright green when checked, grey when not
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -41,7 +41,6 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
           strokeDasharray={totalPathLength} // Length of the path to make it always visible
           style={{
             opacity: checked ? 0 : 1, // Only visible when not checked
-            transition: "opacity 0.3s ease-in-out",
           }}
         />
       </svg>

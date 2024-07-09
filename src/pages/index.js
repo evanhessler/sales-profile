@@ -45,13 +45,19 @@ function IndexPage(props) {
           <Box sx={{ margin: 1 }}>
             <AccordionGroup>
               <CustomAccordion title="Accordion 1">
-                Content of Accordion 1
+                <Typography sx={{ fontSize: 16 }}>
+                  Content of Accordion 1
+                </Typography>
               </CustomAccordion>
               <CustomAccordion title="Accordion 2">
-                Content of Accordion 2
+                <Typography sx={{ fontSize: 16 }}>
+                  Content of Accordion 1
+                </Typography>
               </CustomAccordion>
               <CustomAccordion title="Accordion 3">
-                Content of Accordion 3
+                <Typography sx={{ fontSize: 16 }}>
+                  Content of Accordion 1
+                </Typography>
               </CustomAccordion>
             </AccordionGroup>
           </Box>

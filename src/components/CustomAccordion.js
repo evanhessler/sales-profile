@@ -51,13 +51,16 @@ export default function CustomAccordion({
               : expanded
               ? "2px solid #6b6b6b"
               : "2px solid transparent",
+            borderBottom: expanded || !checked ? "none" : `2px solid #A582EF`,
             borderTopRightRadius: "4px",
             borderTopLeftRadius: "4px",
             borderBottomRightRadius: expanded ? 0 : "4px",
             borderBottomLeftRadius: expanded ? 0 : "4px",
           }}
         >
-          <Typography sx={{ marginTop: 0.8 }}>{title}</Typography>
+          <Typography sx={{ marginTop: 0.8, fontWeight: "bold" }}>
+            {title}
+          </Typography>
           <IconButton
             onClick={(event) => {
               event.stopPropagation();
