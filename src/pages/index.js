@@ -34,8 +34,8 @@ function IndexPage() {
   ];
   return (
     <>
+      <Header />
       <Container sx={{ mb: 10 }}>
-        <Header />
         <AdminView />
         <ScholarshipForm />
         <HomepageAccordions />

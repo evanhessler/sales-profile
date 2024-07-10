@@ -2,18 +2,21 @@ import React, { useContext } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 
 export default function Header() {
   const { isAdminViewVisible, setAdminViewVisible } =
     useContext(ProfileContext);
 
   return (
-    <Box
+    <Container
       sx={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        background: "linear-gradient(0deg, #212121, #3E1391)",
+        py: { xs: 2, md: 5 },
       }}
     >
       <img
@@ -37,6 +40,6 @@ export default function Header() {
           </span>
         </Typography>
       </Box>
-    </Box>
+    </Container>
   );
 }
