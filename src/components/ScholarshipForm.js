@@ -7,10 +7,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Alert from "@mui/material/Alert";
 import Confetti from "react-confetti";
+import FormHelperText from "@mui/material/FormHelperText"; // Import FormHelperText
 
 export default function ScholarshipForm() {
   const [scholarshipAmount, setScholarshipAmount] = useState("");
   const [scholarshipReason, setScholarshipReason] = useState("");
+  const [additionalQuestionAnswer, setAdditionalQuestionAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [approved, setApproved] = useState(false);
   const [alertPosition, setAlertPosition] = useState({ x: 0, y: 0, width: 0 });
@@ -36,9 +38,23 @@ export default function ScholarshipForm() {
     event.preventDefault();
     console.log("Scholarship Amount:", scholarshipAmount);
     console.log("Scholarship Reason:", scholarshipReason);
+    console.log("Additional Question:", getAdditionalQuestion());
+    console.log("Additional Question Answer:", additionalQuestionAnswer);
     setSubmitted(true);
     setApproved(Math.random() > 0.5); // Randomly approve or deny for demo
-    setConfettiRecycle(true);
+  };
+
+  const getAdditionalQuestion = () => {
+    switch (scholarshipAmount) {
+      case "3000":
+        return "Describe a recent project or endeavor where you took the first step towards a significant achievement. How do you plan to apply this initiative-taking attitude to real estate investment?";
+      case "5000":
+        return "Discuss a situation where you had to overcome obstacles to build something important, be it a project, relationship, or career opportunity. How will these experiences help you manage the complexities of real estate?";
+      case "11000":
+        return "Provide an example of how you have led a team or project to success. What leadership qualities do you think are essential for successfully running a real estate business, and how do you plan to apply them?";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -170,14 +186,25 @@ export default function ScholarshipForm() {
                 <MenuItem value="11000">Leadership Grant - $11,000</MenuItem>
               </TextField>
 
+              <FormHelperText
+                sx={{
+                  mb: 1,
+                  mt: 2,
+                  textAlign: "left",
+                  color: "#cfcfcf",
+                  width: { xs: "100%", sm: "500px" },
+                }}
+              >
+                Explain the circumstances surrounding your requirement for a
+                FlipSystem grant.
+              </FormHelperText>
               <TextField
-                label="Explain why you should qualify"
                 multiline
-                rows={8}
+                rows={6}
                 value={scholarshipReason}
                 onChange={(e) => setScholarshipReason(e.target.value)}
                 variant="outlined"
-                inputProps={{ maxLength: 500 }}
+                inputProps={{ maxLength: 1000 }}
                 sx={{
                   mb: 2,
                   width: { xs: "100%", sm: "500px" },
@@ -209,6 +236,64 @@ export default function ScholarshipForm() {
                   style: { fontSize: "0.875rem" },
                 }}
               />
+
+              {scholarshipAmount && (
+                <>
+                  <FormHelperText
+                    sx={{
+                      mb: 1,
+                      mt: 2,
+                      textAlign: "left",
+                      color: "#cfcfcf",
+                      width: { xs: "100%", sm: "500px" },
+                    }}
+                  >
+                    {getAdditionalQuestion()}
+                  </FormHelperText>
+
+                  <TextField
+                    multiline
+                    rows={6}
+                    value={additionalQuestionAnswer}
+                    onChange={(e) =>
+                      setAdditionalQuestionAnswer(e.target.value)
+                    }
+                    variant="outlined"
+                    inputProps={{ maxLength: 1000 }}
+                    sx={{
+                      mb: 2,
+                      width: { xs: "100%", sm: "500px" },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#757575",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#9e9e9e",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#6a1b9a",
+                        },
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#cfcfcf", // Set default label color to white
+                      },
+                      "& .MuiInputBase-input": {
+                        color: "#fff",
+                      },
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "#cfcfcf", // Maintain a different color when focused if desired
+                      },
+                    }}
+                    InputProps={{
+                      style: { fontSize: "0.875rem" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: "0.875rem" },
+                    }}
+                  />
+                </>
+              )}
+
               <Button
                 type="submit"
                 variant="contained"
@@ -216,6 +301,7 @@ export default function ScholarshipForm() {
                   backgroundColor: "#6a1b9a",
                   "&:hover": { backgroundColor: "#4a148c" },
                   color: "#fff",
+                  mt: 2,
                 }}
               >
                 Submit Application
