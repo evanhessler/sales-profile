@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 
 export default function AdvisorsComponent({ advisors }) {
   return (
-    <Box sx={{ m: 1 }}>
+    <Box sx={{ m: 1, mt: 3 }}>
       <Typography
         variant="h6"
         textAlign={{ xs: "center", md: "left" }}
