@@ -84,7 +84,13 @@ function IndexPage(props) {
         </Box>
         <Box sx={{ my: 3 }}>
           <Box sx={{ margin: 1 }}>
-            <Typography variant="h6">What are my next steps?</Typography>
+            <Typography
+              variant="h6"
+              textAlign={{ xs: "center", md: "left" }}
+              sx={{ mb: 1 }}
+            >
+              What are my next steps?
+            </Typography>
           </Box>
           <Box sx={{ margin: 1 }}>
             <AccordionGroup>
@@ -120,9 +126,6 @@ function IndexPage(props) {
                 </Typography>
               </CustomAccordion>
               <CustomAccordion title="Learn About What We Do">
-                <Typography sx={{ fontSize: 16, mb: 2 }}>
-                  Please watch the entire video below.
-                </Typography>
                 <Box>
                   <div
                     className="wistia_responsive_padding"
@@ -229,7 +232,11 @@ function IndexPage(props) {
           </Box>
         </Box>
         <Box sx={{ m: 1 }}>
-          <Typography variant="h6" sx={{ mb: 1 }}>
+          <Typography
+            variant="h6"
+            textAlign={{ xs: "center", md: "left" }}
+            sx={{ mb: 1 }}
+          >
             Meet Your Advisors
           </Typography>
           <Grid container spacing={2}>

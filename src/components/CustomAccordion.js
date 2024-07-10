@@ -48,9 +48,6 @@ export default function CustomAccordion({
             borderBottomLeftRadius: expanded ? 0 : "4px",
           }}
         >
-          <Typography sx={{ marginTop: 1.2, fontWeight: "bold" }}>
-            {title}
-          </Typography>
           <IconButton
             onClick={(event) => {
               event.stopPropagation();
@@ -65,16 +62,14 @@ export default function CustomAccordion({
           >
             <ExpandMoreIcon />
           </IconButton>
+          <Typography sx={{ marginTop: 1.2, fontWeight: "bold" }}>
+            {title}
+          </Typography>
+
           <Box flex="1" />
-          <Box>
-            <IconButton
-              onClick={handleCheck}
-              size="small"
-              style={{ marginRight: "8px" }}
-            >
-              <AnimatedCheckmark checked={checked} onClick={handleCheck} />
-            </IconButton>
-          </Box>
+          <IconButton onClick={handleCheck} style={{ marginRight: "8px" }}>
+            <AnimatedCheckmark checked={checked} onClick={handleCheck} />
+          </IconButton>
         </AccordionSummary>
         <AccordionDetails
           style={{

@@ -36,7 +36,7 @@ const theme = createTheme({
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: 100,
       textTransform: "uppercase",
-      fontSize: 16,
+      fontSize: "clamp(0.75rem, 5vw, 1.2rem)", // Responsive font size based on viewport width
       color: "#cfcfcf",
     },
     fontSize: 18,
