@@ -6,7 +6,7 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
 
   return (
     <Tooltip
-      title={checked ? "Mark as NOT complete" : "Mark as complete"}
+      title={checked ? "Mark as Incomplete" : "Mark as Complete"}
       placement="auto"
     >
       <svg
@@ -37,7 +37,7 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
           strokeWidth="2"
         />
 
-        <path
+        {/* <path
           d="M12 22l6 6 10-16"
           stroke="#458a06"
           strokeWidth="6"
@@ -49,11 +49,11 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
             transition:
               "stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out",
           }}
-        />
+        /> */}
         <path
           d="M12 22l6 6 10-16"
           stroke="#fff"
-          strokeWidth="4"
+          strokeWidth="5"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray={totalPathLength}
@@ -67,7 +67,7 @@ export default function AnimatedCheckmark({ checked, onClick, style }) {
         <path
           d="M12 22l6 6 10-16" // Adjusted checkmark path for taller right half
           stroke="#cfcfcf" // Always grey
-          strokeWidth="6"
+          strokeWidth="5"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray={totalPathLength} // Length of the path to make it always visible

@@ -48,7 +48,7 @@ export default function CustomAccordion({
             borderBottomLeftRadius: expanded ? 0 : "4px",
           }}
         >
-          <Typography sx={{ marginTop: 0.8, fontWeight: "bold" }}>
+          <Typography sx={{ marginTop: 1.2, fontWeight: "bold" }}>
             {title}
           </Typography>
           <IconButton
@@ -85,6 +85,7 @@ export default function CustomAccordion({
             borderBottomLeftRadius: "4px",
             transition: "all 0.3s ease-in-out",
             paddingTop: 20,
+            paddingBottom: 40,
           }}
         >
           {children}
