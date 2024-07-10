@@ -3,19 +3,19 @@ import IndexPage from "./index";
 import { Switch, Route, Router } from "./../util/router";
 import NotFoundPage from "./404";
 import { ThemeProvider } from "./../util/theme";
-import { GameProvider } from "../context/GameContext";
+import { ProfileProvider } from "../context/ProfileContext";
 
 function App(props) {
   return (
     <ThemeProvider>
-      <GameProvider>
+      <ProfileProvider>
         <Router>
           <Switch>
             <Route exact path="/" component={IndexPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </Router>
-      </GameProvider>
+      </ProfileProvider>
     </ThemeProvider>
   );
 }

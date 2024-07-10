@@ -5,8 +5,27 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
 
 export default function HomepageAccordions({}) {
+  useEffect(() => {
+    const script1 = document.createElement("script");
+    script1.src = "https://fast.wistia.com/embed/medias/55ladfk95k.jsonp";
+    script1.async = true;
+
+    const script2 = document.createElement("script");
+    script2.src = "https://fast.wistia.com/assets/external/E-v1.js";
+    script2.async = true;
+
+    document.body.appendChild(script1);
+    document.body.appendChild(script2);
+
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
+  }, []);
+
   return (
     <AccordionGroup>
       <CustomAccordion title="Consultation with Whitney" defaultChecked={true}>

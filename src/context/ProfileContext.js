@@ -6,18 +6,18 @@ import React, {
   useCallback,
 } from "react";
 
-const GameContext = createContext();
+const ProfileContext = createContext();
 
-export const GameProvider = ({ children }) => {
+export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     generateProperty("low");
   }, []);
 
-  const [gameData, setGameData] = useState({
+  const [profileData, setProfileData] = useState({
     properties: [],
     nextProperty: null,
     currentDate: new Date(2024, 0, 1),
-    gameStatus: {
+    profileStatus: {
       isPaused: false,
       speed: "slow",
     },
@@ -32,44 +32,44 @@ export const GameProvider = ({ children }) => {
         monthlyCashflow: 20000,
         age: 80,
       },
-      gameStartDate: new Date(),
-      gameEndDate: new Date(2025, 5),
+      profileStartDate: new Date(),
+      profileEndDate: new Date(2025, 5),
       isTimePaused: false,
     },
   });
 
   const advanceTime = useCallback(() => {
     const newDate = new Date(
-      gameData.currentDate.setMonth(gameData.currentDate.getMonth() + 1)
+      profileData.currentDate.setMonth(profileData.currentDate.getMonth() + 1)
     );
-    setGameData((prevGameData) => ({
-      ...prevGameData,
+    setProfileData((prevProfileData) => ({
+      ...prevProfileData,
       currentDate: newDate,
     }));
-  }, [gameData.currentDate, setGameData]);
+  }, [profileData.currentDate, setProfileData]);
 
   useEffect(() => {
     let intervalId;
-    if (!gameData.gameStatus.isPaused) {
+    if (!profileData.profileStatus.isPaused) {
       const intervalDuration =
-        gameData.gameStatus.speed === "slow" ? 10000 : 5000;
+        profileData.profileStatus.speed === "slow" ? 10000 : 5000;
       intervalId = setInterval(advanceTime, intervalDuration);
     } else {
       clearInterval(intervalId);
     }
 
     return () => clearInterval(intervalId);
-  }, [gameData.gameStatus, advanceTime]);
+  }, [profileData.profileStatus, advanceTime]);
 
   useEffect(() => {
     generateProperty("low");
   }, []);
 
   const setTimeSpeed = (speed) => {
-    setGameData({
-      ...gameData,
-      gameStatus: {
-        ...gameData.gameStatus,
+    setProfileData({
+      ...profileData,
+      profileStatus: {
+        ...profileData.profileStatus,
         speed,
         isPaused: speed === "paused",
       },
@@ -105,20 +105,22 @@ export const GameProvider = ({ children }) => {
       status: isTenanted ? "Tenanted" : "Vacant",
     };
 
-    setGameData((prevGameData) => ({
-      ...prevGameData,
+    setProfileData((prevProfileData) => ({
+      ...prevProfileData,
       nextProperty: newProperty,
     }));
   };
 
   return (
-    <GameContext.Provider value={{ gameData, generateProperty, setTimeSpeed }}>
+    <ProfileContext.Provider
+      value={{ profileData, generateProperty, setTimeSpeed }}
+    >
       {children}
-    </GameContext.Provider>
+    </ProfileContext.Provider>
   );
 };
 
-export const useGame = () => useContext(GameContext);
+export const useProfile = () => useContext(ProfileContext);
 
 const determineBasePrice = (filter) => {
   let basePrice;

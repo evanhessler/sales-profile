@@ -6,14 +6,14 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useGame } from "../context/GameContext";
+import { useProfile } from "../context/ProfileContext";
 import Box from "@mui/material/Box";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 
 function Navbar() {
-  const { gameData, setTimeSpeed } = useGame();
+  const { profileData, setTimeSpeed } = useProfile();
   const theme = useTheme();
 
   const handleSpeedChange = (event, newSpeed) => {
@@ -46,14 +46,14 @@ function Navbar() {
         >
           <Box>
             <Typography variant="subtitle1" color="common.white" gutterBottom>
-              Game Speed
+              Profile Speed
             </Typography>
             <ToggleButtonGroup
               color="primary"
-              value={gameData.gameStatus.speed}
+              value={profileData.profileStatus.speed}
               exclusive
               onChange={handleSpeedChange}
-              aria-label="Game speed"
+              aria-label="Profile speed"
               sx={{
                 "& .MuiToggleButtonGroup-grouped": {
                   border: 0,
