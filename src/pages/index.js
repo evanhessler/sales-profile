@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Meta from "./../components/Meta";
-import CustomAccordion from "./../components/CustomAccordion";
-import AccordionGroup from "./../components/AccordionGroup";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,6 +8,9 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import HomepageAccordions from "../components/HomepageAccordions";
 
 function IndexPage(props) {
   useEffect(() => {
@@ -50,10 +51,20 @@ function IndexPage(props) {
     },
   ];
 
+  const [scholarshipAmount, setScholarshipAmount] = useState("");
+  const [scholarshipReason, setScholarshipReason] = useState("");
+
+  const handleScholarshipSubmit = (event) => {
+    event.preventDefault();
+    // Handle the scholarship application submission here
+    console.log("Scholarship Amount:", scholarshipAmount);
+    console.log("Scholarship Reason:", scholarshipReason);
+  };
+
   return (
     <>
       <Meta />
-      <Container>
+      <Container sx={{ mb: 10 }}>
         <Box
           sx={{
             display: "flex",
@@ -93,142 +104,7 @@ function IndexPage(props) {
             </Typography>
           </Box>
           <Box sx={{ margin: 1 }}>
-            <AccordionGroup>
-              <CustomAccordion
-                title="Consultation with Whitney"
-                defaultChecked={true}
-              >
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Time of Call:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    July 8th, 12PM EST
-                  </span>
-                </Typography>
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Duration:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    15 Minutes
-                  </span>
-                </Typography>
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Meeting Link:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    We will call you at (480) 784 7360
-                  </span>
-                </Typography>
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Meeting Notes:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    "Hey Evan, it was great meeting with you! Excited to have
-                    you go through this page and show your wife. Let me know if
-                    I can answer any questions for you. - Whitney"
-                  </span>
-                </Typography>
-              </CustomAccordion>
-              <CustomAccordion title="Learn About What We Do">
-                <Box>
-                  <div
-                    className="wistia_responsive_padding"
-                    style={{ padding: "56.25% 0 0 0", position: "relative" }}
-                  >
-                    <div
-                      className="wistia_responsive_wrapper"
-                      style={{
-                        height: "100%",
-                        left: 0,
-                        position: "absolute",
-                        top: 0,
-                        width: "100%",
-                      }}
-                    >
-                      <div
-                        className="wistia_embed wistia_async_55ladfk95k seo=true videoFoam=true"
-                        style={{
-                          height: "100%",
-                          position: "relative",
-                          width: "100%",
-                        }}
-                      >
-                        <div
-                          className="wistia_swatch"
-                          style={{
-                            height: "100%",
-                            left: 0,
-                            opacity: 0,
-                            overflow: "hidden",
-                            position: "absolute",
-                            top: 0,
-                            transition: "opacity 200ms",
-                            width: "100%",
-                          }}
-                        >
-                          <img
-                            src="https://fast.wistia.com/embed/medias/55ladfk95k/swatch"
-                            style={{
-                              filter: "blur(5px)",
-                              height: "100%",
-                              objectFit: "contain",
-                              width: "100%",
-                            }}
-                            alt=""
-                            aria-hidden="true"
-                            onLoad={(e) => {
-                              e.target.style.opacity = 1;
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-              </CustomAccordion>
-              <CustomAccordion title="Tell us About your Goals"></CustomAccordion>
-              <CustomAccordion title="Financial Exercise"></CustomAccordion>
-              <CustomAccordion title="Other Decision Makers"></CustomAccordion>
-              <CustomAccordion title="Perform Due Diligence"></CustomAccordion>
-              <CustomAccordion title="Consultation with Senior Advisor">
-                <Tooltip title="Meeting start time is not until July 8th at 12pm EST">
-                  <span style={{ cursor: "not-allowed" }}>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "#6a1b9a",
-                        "&:hover": { backgroundColor: "#4a148c" },
-                        "&.Mui-disabled": {
-                          backgroundColor: "#6a1b9a",
-                          color: "rgba(255, 255, 255, 0.7)",
-                        },
-                      }}
-                      href="https://zoom.com/meetings.com"
-                      disabled
-                    >
-                      Zoom Meeting Link
-                    </Button>
-                  </span>
-                </Tooltip>
-
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Time of Call:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    July 8th, 12PM EST
-                  </span>
-                </Typography>
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Duration:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    45 Minutes
-                  </span>
-                </Typography>
-                <Typography sx={{ fontSize: 16, my: 2 }}>
-                  Meeting Notes:{" "}
-                  <span style={{ fontWeight: "bold", color: "#fff" }}>
-                    "Hey Evan, it was great meeting with you! Excited to have
-                    you go through this page and show your wife. Let me know if
-                    I can answer any questions for you. - Whitney"
-                  </span>
-                </Typography>
-              </CustomAccordion>
-            </AccordionGroup>
+            <HomepageAccordions />
           </Box>
         </Box>
         <Box sx={{ m: 1 }}>
@@ -271,6 +147,138 @@ function IndexPage(props) {
               </Grid>
             ))}
           </Grid>
+        </Box>
+        <Box sx={{ m: 1, mt: 3 }}>
+          <Typography
+            variant="h6"
+            textAlign={{ xs: "center", md: "left" }}
+            sx={{ mb: 1 }}
+          >
+            Apply for a Grant
+          </Typography>
+          <Paper sx={{ p: 3 }}>
+            <Typography textAlign="center" sx={{ fontSize: 16, mb: 2 }}>
+              FlipSystem awards a limited number of grants to individuals with
+              extenuating circumstances who are otherwise unable to get started
+              in the program. If this is you, please explain your situation
+              below.{" "}
+              <span
+                style={{
+                  fontStyle: "italic",
+                  color: "#fff",
+                }}
+              >
+                Note: Grants are highly competitive. An application submission
+                is not a guaranteed approval.
+              </span>
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleScholarshipSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mt: 5,
+              }}
+            >
+              <TextField
+                select
+                label="Select Grant Amount"
+                value={scholarshipAmount}
+                onChange={(e) => setScholarshipAmount(e.target.value)}
+                variant="outlined"
+                sx={{
+                  mb: 2,
+                  width: { xs: "100%", sm: "500px" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#757575",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#9e9e9e",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#6a1b9a",
+                    },
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#cfcfcf",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#cfcfcf", // Keeps the label color consistent even when focused
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#cfcfcf", // Set default label color to white
+                  },
+                  "& .MuiSvgIcon-root": {
+                    color: "#cfcfcf", // Purple color for the dropdown arrow
+                  },
+                }}
+                InputProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+              >
+                <MenuItem value="3k">$3k</MenuItem>
+                <MenuItem value="7k">$7k</MenuItem>
+                <MenuItem value="19k">$19k</MenuItem>
+              </TextField>
+
+              <TextField
+                label="Explain why you should qualify"
+                multiline
+                rows={8}
+                value={scholarshipReason}
+                onChange={(e) => setScholarshipReason(e.target.value)}
+                variant="outlined"
+                inputProps={{ maxLength: 500 }}
+                sx={{
+                  mb: 2,
+                  width: { xs: "100%", sm: "500px" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#757575",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#9e9e9e",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#6a1b9a",
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#cfcfcf", // Set default label color to white
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#fff",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#cfcfcf", // Maintain a different color when focused if desired
+                  },
+                }}
+                InputProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#6a1b9a",
+                  "&:hover": { backgroundColor: "#4a148c" },
+                  color: "#fff",
+                }}
+              >
+                Submit Application
+              </Button>
+            </Box>
+          </Paper>
         </Box>
       </Container>
     </>

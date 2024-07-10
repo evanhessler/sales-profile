@@ -62,7 +62,7 @@ export default function CustomAccordion({
           >
             <ExpandMoreIcon />
           </IconButton>
-          <Typography sx={{ marginTop: 1.2, fontWeight: "bold" }}>
+          <Typography sx={{ marginTop: 1.6, fontWeight: "bold" }}>
             {title}
           </Typography>
 
