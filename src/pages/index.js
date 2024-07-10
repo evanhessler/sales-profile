@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Header from "../components/Header";
 import AdvisorsComponent from "../components/AdvisorsComponent";
 import ScholarshipForm from "../components/ScholarshipForm";
+import AdminView from "../components/AdminView";
 import HomepageAccordions from "../components/HomepageAccordions";
+import { ProfileContext } from "../context/ProfileContext"; // Make sure this path matches the actual import path in your project structure
 
 function IndexPage() {
+  const { isAdminViewVisible, setAdminViewVisible } =
+    useContext(ProfileContext);
+
   const advisors = [
     {
       name: "Whitney Smith",
@@ -29,6 +36,7 @@ function IndexPage() {
     <>
       <Container sx={{ mb: 10 }}>
         <Header />
+        <AdminView />
         <ScholarshipForm />
         <HomepageAccordions />
         <AdvisorsComponent advisors={advisors} />

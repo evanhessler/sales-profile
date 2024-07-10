@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ProfileContext } from "../context/ProfileContext";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 export default function Header() {
+  const { isAdminViewVisible, setAdminViewVisible } =
+    useContext(ProfileContext);
+
   return (
     <Box
       sx={{
@@ -27,7 +31,10 @@ export default function Header() {
           We are accepting high-achieving individuals who are open to
           accumulating wealth with real estate. You are here because you need to
           make an informed decision on investing your time and money. Use this
-          page to see if investing with FlipSystem is right for you.
+          page to see if investing with FlipSystem is right for{" "}
+          <span onClick={() => setAdminViewVisible(!isAdminViewVisible)}>
+            you.
+          </span>
         </Typography>
       </Box>
     </Box>

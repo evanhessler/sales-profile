@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,19 +8,21 @@ import Paper from "@mui/material/Paper";
 import Alert from "@mui/material/Alert";
 import Confetti from "react-confetti";
 import FormHelperText from "@mui/material/FormHelperText"; // Import FormHelperText
+import { ProfileContext } from "../context/ProfileContext";
 
 export default function ScholarshipForm() {
   const [scholarshipAmount, setScholarshipAmount] = useState("");
   const [scholarshipReason, setScholarshipReason] = useState("");
   const [additionalQuestionAnswer, setAdditionalQuestionAnswer] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [approved, setApproved] = useState(false);
   const [alertPosition, setAlertPosition] = useState({ x: 0, y: 0, width: 0 });
   const [confettiRecycle, setConfettiRecycle] = useState(true);
   const alertRef = useRef(null);
 
+  const context = useContext(ProfileContext);
+
   useEffect(() => {
-    if (submitted && approved) {
+    console.log("HERE1123", alertRef);
+    if (context.showGrant && context.grantApproved && alertRef.current) {
       const alertBox = alertRef.current.getBoundingClientRect();
       setAlertPosition({
         x: alertBox.left,
@@ -32,16 +34,21 @@ export default function ScholarshipForm() {
         setConfettiRecycle(false);
       }, 10000); // Stop confetti after 10 seconds
     }
-  }, [submitted, approved]);
+  }, [context.showGrant, context.grantApproved, alertRef]);
 
   const handleScholarshipSubmit = (event) => {
     event.preventDefault();
+
+    context.setGrantAmount(scholarshipAmount);
+    context.setCircumstancesQuestion(scholarshipReason);
+    context.setAdditionalQuestion(getAdditionalQuestion());
+    context.setAdditionalQuestionAnswer(additionalQuestionAnswer);
+    context.setGrantSubmitted(true);
+
     console.log("Scholarship Amount:", scholarshipAmount);
     console.log("Scholarship Reason:", scholarshipReason);
     console.log("Additional Question:", getAdditionalQuestion());
     console.log("Additional Question Answer:", additionalQuestionAnswer);
-    setSubmitted(true);
-    setApproved(Math.random() > 0.5); // Randomly approve or deny for demo
   };
 
   const getAdditionalQuestion = () => {
@@ -56,6 +63,9 @@ export default function ScholarshipForm() {
         return "";
     }
   };
+  if (!context.showGrant) {
+    return null;
+  }
 
   return (
     <Box sx={{ m: 1, mt: 3 }}>
@@ -83,9 +93,9 @@ export default function ScholarshipForm() {
             not a guaranteed approval.
           </span>
         </Typography>
-        {submitted ? (
+        {context.grantSubmitted ? (
           <>
-            {approved && (
+            {context.grantApproved && (
               <Confetti
                 width={window.innerWidth}
                 height={window.innerHeight}
@@ -103,11 +113,11 @@ export default function ScholarshipForm() {
             )}
             <Alert
               ref={alertRef}
-              severity={approved ? "success" : "info"}
+              severity={context.grantApproved ? "success" : "info"}
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                backgroundColor: approved ? "#e1fac8" : "#d6f8ff",
+                backgroundColor: context.grantApproved ? "#e1fac8" : "#d6f8ff",
                 mt: 5,
                 mb: 3,
                 "& .MuiSvgIcon-root": {
@@ -115,7 +125,7 @@ export default function ScholarshipForm() {
                 },
               }}
             >
-              {approved ? (
+              {context.grantApproved ? (
                 <>
                   Congratulations! Your application has been{" "}
                   <strong>approved</strong>. Your decision is required within 24
