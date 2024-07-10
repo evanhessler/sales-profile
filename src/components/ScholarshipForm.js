@@ -5,15 +5,18 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
+import Alert from "@mui/material/Alert";
 
 export default function ScholarshipForm() {
   const [scholarshipAmount, setScholarshipAmount] = useState("");
   const [scholarshipReason, setScholarshipReason] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleScholarshipSubmit = (event) => {
     event.preventDefault();
     console.log("Scholarship Amount:", scholarshipAmount);
     console.log("Scholarship Reason:", scholarshipReason);
+    setSubmitted(true);
   };
 
   return (
@@ -40,112 +43,124 @@ export default function ScholarshipForm() {
             not a guaranteed approval.
           </span>
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleScholarshipSubmit}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mt: 5,
-          }}
-        >
-          <TextField
-            select
-            label="Select Grant Amount"
-            value={scholarshipAmount}
-            onChange={(e) => setScholarshipAmount(e.target.value)}
-            variant="outlined"
-            sx={{
-              mb: 2,
-              width: { xs: "100%", sm: "500px" },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#757575",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#9e9e9e",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#6a1b9a",
-                },
-              },
-              "& .MuiInputBase-input": {
-                color: "#cfcfcf",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#cfcfcf", // Keeps the label color consistent even when focused
-              },
-              "& .MuiInputLabel-root": {
-                color: "#cfcfcf", // Set default label color to white
-              },
-              "& .MuiSvgIcon-root": {
-                color: "#cfcfcf", // Purple color for the dropdown arrow
-              },
-            }}
-            InputProps={{
-              style: { fontSize: "0.875rem" },
-            }}
-            InputLabelProps={{
-              style: { fontSize: "0.875rem" },
-            }}
+        {submitted ? (
+          <Alert
+            severity="info"
+            sx={{ fontSize: 16, display: "flex", justifyContent: "center" }}
           >
-            <MenuItem value="3k">$3k</MenuItem>
-            <MenuItem value="7k">$7k</MenuItem>
-            <MenuItem value="19k">$19k</MenuItem>
-          </TextField>
+            Your application is under review. Expect to receive a response
+            within 1-3 business days.
+          </Alert>
+        ) : (
+          <>
+            <Box
+              component="form"
+              onSubmit={handleScholarshipSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mt: 5,
+              }}
+            >
+              <TextField
+                select
+                label="Select Grant Amount"
+                value={scholarshipAmount}
+                onChange={(e) => setScholarshipAmount(e.target.value)}
+                variant="outlined"
+                sx={{
+                  mb: 2,
+                  width: { xs: "100%", sm: "500px" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#757575",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#9e9e9e",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#6a1b9a",
+                    },
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#cfcfcf",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#cfcfcf", // Keeps the label color consistent even when focused
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#cfcfcf", // Set default label color to white
+                  },
+                  "& .MuiSvgIcon-root": {
+                    color: "#cfcfcf", // Purple color for the dropdown arrow
+                  },
+                }}
+                InputProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+              >
+                <MenuItem value="3k">$3k</MenuItem>
+                <MenuItem value="7k">$5k</MenuItem>
+                <MenuItem value="19k">$11k</MenuItem>
+              </TextField>
 
-          <TextField
-            label="Explain why you should qualify"
-            multiline
-            rows={8}
-            value={scholarshipReason}
-            onChange={(e) => setScholarshipReason(e.target.value)}
-            variant="outlined"
-            inputProps={{ maxLength: 500 }}
-            sx={{
-              mb: 2,
-              width: { xs: "100%", sm: "500px" },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#757575",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#9e9e9e",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#6a1b9a",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#cfcfcf", // Set default label color to white
-              },
-              "& .MuiInputBase-input": {
-                color: "#fff",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#cfcfcf", // Maintain a different color when focused if desired
-              },
-            }}
-            InputProps={{
-              style: { fontSize: "0.875rem" },
-            }}
-            InputLabelProps={{
-              style: { fontSize: "0.875rem" },
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              backgroundColor: "#6a1b9a",
-              "&:hover": { backgroundColor: "#4a148c" },
-              color: "#fff",
-            }}
-          >
-            Submit Application
-          </Button>
-        </Box>
+              <TextField
+                label="Explain why you should qualify"
+                multiline
+                rows={8}
+                value={scholarshipReason}
+                onChange={(e) => setScholarshipReason(e.target.value)}
+                variant="outlined"
+                inputProps={{ maxLength: 500 }}
+                sx={{
+                  mb: 2,
+                  width: { xs: "100%", sm: "500px" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#757575",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#9e9e9e",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#6a1b9a",
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#cfcfcf", // Set default label color to white
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#fff",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#cfcfcf", // Maintain a different color when focused if desired
+                  },
+                }}
+                InputProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: "0.875rem" },
+                }}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#6a1b9a",
+                  "&:hover": { backgroundColor: "#4a148c" },
+                  color: "#fff",
+                }}
+              >
+                Submit Application
+              </Button>
+            </Box>
+          </>
+        )}
       </Paper>
     </Box>
   );

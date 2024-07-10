@@ -29,9 +29,9 @@ function IndexPage() {
     <>
       <Container sx={{ mb: 10 }}>
         <Header />
+        <ScholarshipForm />
         <HomepageAccordions />
         <AdvisorsComponent advisors={advisors} />
-        <ScholarshipForm />
       </Container>
     </>
   );
