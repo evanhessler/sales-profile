@@ -1,4 +1,6 @@
 import React, { createContext, useState } from "react";
+import { useQuery } from "react-query";
+import { getTestDocs } from "./../util/db.js";
 
 // Create a context
 export const ProfileContext = createContext();
@@ -14,6 +16,11 @@ export const ProfileProvider = ({ children }) => {
   const [grantSubmitted, setGrantSubmitted] = useState(false);
   const [grantApproved, setGrantApproved] = useState(false);
   const [showGrant, setShowGrant] = useState(false);
+
+  const { data: testDocs, status: testDocsStatus } = useQuery(
+    "testDocs",
+    getTestDocs
+  );
 
   return (
     <ProfileContext.Provider
@@ -34,6 +41,8 @@ export const ProfileProvider = ({ children }) => {
         setGrantApproved,
         showGrant,
         setShowGrant,
+        testDocs,
+        testDocsStatus,
       }}
     >
       {children}

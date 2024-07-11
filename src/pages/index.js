@@ -8,16 +8,12 @@ import ScholarshipForm from "../components/ScholarshipForm";
 import AdminView from "../components/AdminView";
 import HomepageAccordions from "../components/HomepageAccordions";
 import { ProfileContext } from "../context/ProfileContext"; // Make sure this path matches the actual import path in your project structure
-import { getTestDocs } from "./../util/db.js";
-import { useQuery } from "react-query";
 
 function IndexPage() {
-  const { isAdminViewVisible, setAdminViewVisible } =
+  const { isAdminViewVisible, setAdminViewVisible, testDocs, testDocsStatus } =
     useContext(ProfileContext);
 
-  const { data: items, error, status } = useQuery("testDocs", getTestDocs);
-
-  console.log(items, status, "ITEMS");
+  console.log(testDocs, testDocsStatus, "ITEMS");
 
   const advisors = [
     {
