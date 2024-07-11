@@ -1,31 +1,36 @@
-
 ## 👉 Get Started
+
 Install dependencies
+
 ```
 npm install
 ```
+
 Update your `.env` file with values for each environment variable
+
 ```
 API_KEY=AIzaSyBkkFF0XhNZeWuDmOfEhsgdfX1VBG7WTas
 etc ...
 ```
 
 Run the development server
+
 ```
 npm run start
 ```
+
 When the above command completes you'll be able to view your website at `http://localhost:3000`
 
 ## 🥞 Stack
+
 This project uses the following libraries and services:
+
 - Framework - [Create React App](https://create-react-app.dev) with React Router
 - UI Kit - [Material UI](https://material-ui.com)
+- Database - [Cloud Firestore](https://firebase.google.com/products/firestore)
 - Hosting - [Vercel](https://vercel.com)
 
-
 ## 📚 Guide
-
-
 
 <details>
 <summary><b>Routing</b></summary>
@@ -54,12 +59,44 @@ function MyComponent() {
   );
 }
 ```
+
 </p>
 </details>
 
+<details>
+<summary><b>Database</b></summary>
+<p>
+  This project uses <a href="https://firebase.google.com/products/firestore">Cloud Firestore</a> and includes some data fetching hooks to get you started (located in <code><a href="src/util/db.js">src/util/db.js</a></code>). You'll want to edit that file and add any additional query hooks you need for your project.
 
+```js
+import { useAuth } from './../util/auth.js';
+import { useItemsByOwner } from './../util/db.js';
+import ItemsList from './ItemsList.js';
 
+function ItemsPage(){
+  const auth = useAuth();
 
+  // Fetch items by owner
+  // Returned status value will be "idle" if we're waiting on
+  // the uid value or "loading" if the query is executing.
+  const uid = auth.user ? auth.user.uid : undefined;
+  const { data: items, status } = useItemsByOwner(uid);
+
+  // Once we have items data render ItemsList component
+  return (
+    <div>
+      {(status === "idle" || status === "loading") ? (
+        <span>One moment please</span>
+      ) : (
+        <ItemsList data={items}>
+      )}
+    </div>
+  );
+}
+```
+
+</p>
+</details>
 
 <details>
 <summary><b>Deployment</b></summary>
@@ -89,6 +126,7 @@ vercel --prod
 ```
 
 See <a target="_blank" href="https://vercel.com/docs/platform/deployments">Vercel Deployments</a> for more details.
+
 </p>
 </details>
 
@@ -98,4 +136,3 @@ See <a target="_blank" href="https://vercel.com/docs/platform/deployments">Verce
   This project was created using <a href="https://divjoy.com?ref=readme_other">Divjoy</a>, the React codebase generator. You can find more info in the <a href="https://docs.divjoy.com">Divjoy Docs</a>.
 </p>
 </details>
-  
